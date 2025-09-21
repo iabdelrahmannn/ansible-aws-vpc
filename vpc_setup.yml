@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 - hosts: localhost
   connection: local
   gather_facts: false
@@ -15,3 +16,22 @@
       state: "{{ state }}"
     register: vpcout
     
+=======
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+   - name: import vpc module
+    include_vars: vars/vpc_setup
+   - name: create vpc
+    ec2_vpc_net:
+      name: "{{ vpc_name }}"
+      cidr_block: "{{ vpcCidr }}"
+      region: "{{ region }}"
+      dns_support: yes
+      dns_hostnames: yes
+      tenancy: default
+      state: "{{ state }}"
+    register: vpcout
+    
+>>>>>>> 0d8de6f7c99a2dacea96e0b78601613b3bf16bce
