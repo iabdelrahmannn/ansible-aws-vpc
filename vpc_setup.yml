@@ -33,4 +33,77 @@
 
     - debug:
         var: pubsub1out
+    
+    - name: Create public subnet 2 for zone 2
+      amazon.aws.ec2_vpc_subnet:
+        vpc_id: "{{ vpcout.vpc.id }}"
+        cidr: "{{ PubSub2Cidr }}"
+        az: "{{ zone2 }}"
+        region: "{{ region }}"
+        state: "{{ state }}"
+        map_public: true
+        resource_tags:
+          Name: "{{ vpc_name }}-pubsub-2"
+      register: pubsub2_out
 
+    - debug:
+        var: pubsub2_out
+
+    - name: Create public subnet 3 for zone 3
+      amazon.aws.ec2_vpc_subnet:
+        vpc_id: "{{ vpcout.vpc.id }}"
+        cidr: "{{ PubSub3Cidr }}"
+        az: "{{ zone3 }}"
+        region: "{{ region }}"
+        state: "{{ state }}"
+        map_public: true
+        resource_tags:
+          Name: "{{ vpc_name }}-pubsub-3"
+      register: pubsub3_out 
+
+    - debug:
+        var: pubsub3_out
+
+    - name: Create private subnet 4 for zone 4
+      amazon.aws.ec2_vpc_subnet:
+        vpc_id: "{{ vpcout.vpc.id }}"
+        cidr: "{{ PrivSub4Cidr }}"
+        az: "{{ zone4 }}"
+        region: "{{ region }}"
+        state: "{{ state }}"
+        resource_tags:
+          Name: "{{ vpc_name }}-privsub-4"
+      register: privsub4_out
+
+    - debug:
+        var: privsub4_out
+
+    - name: Create private subnet 5 for zone 5
+      amazon.aws.ec2_vpc_subnet:
+        vpc_id: "{{ vpcout.vpc.id }}"
+        cidr: "{{ PrivSub5Cidr }}"
+        az: "{{ zone5 }}"
+        region: "{{ region }}"
+        state: "{{ state }}"
+        resource_tags:
+          Name: "{{ vpc_name }}-privsub-5"
+      register: privsub5_out
+
+    - debug:
+        var: privsub5_out
+
+    - name: Create private subnet 6 for zone 6
+      amazon.aws.ec2_vpc_subnet:
+        vpc_id: "{{ vpcout.vpc.id }}"
+        cidr: "{{ PrivSub6Cidr }}"
+        az: "{{ zone6 }}"
+        region: "{{ region }}"
+        state: "{{ state }}"
+        resource_tags:
+          Name: "{{ vpc_name }}-privsub-6"
+      register: privsub6_out
+
+    - debug:
+        var: privsub6_out
+
+    
