@@ -23,9 +23,9 @@
       amazon.aws.ec2_vpc_subnet:
         vpc_id: "{{ vpcout.vpc.id }}"
         cidr: "{{ PubSub1Cidr }}"
-        zone: "{{ zone1 }}"
+        az: "{{ zone1 }}"
         state: "{{ state }}"
-        map_public_ip: true
+        map_public: true
         resource_tags:
           Name: "{{ vpc_name }}-pubsub-1"
       register: pubsub1_out
