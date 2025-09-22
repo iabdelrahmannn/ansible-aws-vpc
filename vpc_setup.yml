@@ -122,7 +122,7 @@
         vpc_id: "{{ vpcout.vpc.id }}"
         region: "{{ region }}"
         state: "{{ state }}"
-        resource_tags:
+        tags:
           Name: "{{ vpc_name }}-pubrt"
         subnets:
           - "{{ pubsub1_out.subnet.id }}"
@@ -130,6 +130,6 @@
           - "{{ pubsub3_out.subnet.id }}"
         routes:
           - dest: 0.0.0.0/0
-            gateway: "{{ igw_out.igw.id }}"
+            gateway_id: "{{ igw_out.igw.id }}"
       register: pubrt_out
       
