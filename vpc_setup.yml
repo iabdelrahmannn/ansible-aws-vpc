@@ -105,5 +105,14 @@
 
     - debug:
         var: privsub6_out
+    - name: Create internet gateway
+      amazon.aws.ec2_vpc_igw:
+        vpc_id: "{{ vpcout.vpc.id }}"
+        region: "{{ region }}"
+        state: "{{ state }}"
+        resource_tags:
+          Name: "{{ vpc_name }}-igw"
+      register: igw_out
 
-    
+    - debug:
+        var: igw_out
