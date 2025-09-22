@@ -68,7 +68,7 @@
       amazon.aws.ec2_vpc_subnet:
         vpc_id: "{{ vpcout.vpc.id }}"
         cidr: "{{ PrivSub4Cidr }}"
-        az: "{{ zone4 }}"
+        az: "{{ zone1 }}"
         region: "{{ region }}"
         state: "{{ state }}"
         resource_tags:
@@ -82,7 +82,7 @@
       amazon.aws.ec2_vpc_subnet:
         vpc_id: "{{ vpcout.vpc.id }}"
         cidr: "{{ PrivSub5Cidr }}"
-        az: "{{ zone5 }}"
+        az: "{{ zone2 }}"
         region: "{{ region }}"
         state: "{{ state }}"
         resource_tags:
@@ -96,7 +96,7 @@
       amazon.aws.ec2_vpc_subnet:
         vpc_id: "{{ vpcout.vpc.id }}"
         cidr: "{{ PrivSub6Cidr }}"
-        az: "{{ zone6 }}"
+        az: "{{ zone3 }}"
         region: "{{ region }}"
         state: "{{ state }}"
         resource_tags:
