@@ -174,7 +174,7 @@
        -  privrt_out.route_table.id
        -  pubrt_out.route_table.id
 
-    - name: Collect IDs to export
+ - name: Collect IDs to export
       ansible.builtin.set_fact:
         vpc_vars:
           vpcid: "{{ vpcout.vpc.id }}"
@@ -190,26 +190,8 @@
           pubrtid: "{{ pubrt_out.route_table.id }}"
         cacheable: true
 
-    - name: Write variables file
+    - name: create variables file for vpc
       ansible.builtin.copy:
         dest: vars/output_vars.yml
         mode: "0644"
         content: "{{ vpc_vars | to_nice_yaml }}"
-
-- name: create variables file for vpc
-  copy:
-    dest: vars/output_vars.yml
-    mode: "0644"
-    content: |
-      vpcid: {{ vpcout.vpc.id }}
-      pubsub1id: {{ pubsub1_out.subnet.id }}
-      pubsub2id: {{ pubsub2_out.subnet.id }}
-      pubsub3id: {{ pubsub3_out.subnet.id }}
-      privsub4id: {{ privsub4_out.subnet.id }}
-      privsub5id: {{ privsub5_out.subnet.id }}
-      privsub6id: {{ privsub6_out.subnet.id }}
-      igwid: {{ igw_out.gateway_id | default(igw_out.internet_gateway_id) | default(igw_out.igw_id) }}
-      NATGWid: {{ NATGW_out.nat_gateway_id }}
-      privrtid: {{ privrt_out.route_table.id }}
-      pubrtid: {{ pubrt_out.route_table.id }}
-
