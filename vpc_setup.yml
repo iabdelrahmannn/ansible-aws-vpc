@@ -24,6 +24,7 @@
         vpc_id: "{{ vpcout.vpc.id }}"
         cidr: "{{ PubSub1Cidr }}"
         az: "{{ zone1 }}"
+        region: "{{ region }}"
         state: "{{ state }}"
         map_public: true
         resource_tags:
