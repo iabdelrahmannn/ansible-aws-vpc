@@ -174,7 +174,7 @@
        -  privrt_out.route_table.id
        -  pubrt_out.route_table.id
 
-  - set_fact:
+- set_fact:
 
       vpcid: "{{vpcout.vpc.id}}"
       pubsub1id: "{{pubsub1_out.subnet.id}}"
@@ -190,7 +190,7 @@
       cacheable: yes
 
 - name: create variables file for vpc
-    copy:
+  copy:
       content: "{{vpcid: "{{vpcout.vpc.id}}"
       pubsub1id: "{{pubsub1_out.subnet.id}}"
       pubsub2id: "{{pubsub2_out.subnet.id}}"
