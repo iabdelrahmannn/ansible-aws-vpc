@@ -116,8 +116,9 @@
 
     - debug:
         var: igw_out
+    
     - name: Create public route table
-      amazon.aws.ec2_vpc_rt:
+      amazon.aws.ec2_vpc_route_table:
         vpc_id: "{{ vpcout.vpc.id }}"
         region: "{{ region }}"
         state: "{{ state }}"
