@@ -12,7 +12,7 @@
     - name: create a new EC2 key pair
       amazon.aws.ec2_key:
         name: vprofile-key
-      region: "{{region}}"
+        region: "{{region}}"
       register: key_out
 
     - name: save private key into file bastion key.pem
@@ -33,7 +33,7 @@
             from_port: 22
             to_port: 22
             cidr_ip: "{{MYIP}}"
-         register: bastionsg_out
+      register: bastionsg_out
     
     - name: creating ec2
       amazon.aws.ec2_instance:
@@ -43,6 +43,7 @@
         instance_type: t2.micro
         wait: yes
         exact_count: 1
+        subnet_id: "{{pubsub1id}}"
         security_group: "{{bastionsg_out.group_id}}"
         tags:
           Environment: Testing
