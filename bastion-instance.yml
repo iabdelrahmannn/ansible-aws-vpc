@@ -39,7 +39,7 @@
       amazon.aws.ec2_instance:
         key_name: vprofile-key
         region: "{{region}}"
-        image: "{{basion_ami}}"
+        image_id: "{{basion_ami}}"
         instance_type: t2.micro
         wait: yes
         exact_count: 1
