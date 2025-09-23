@@ -159,7 +159,7 @@
             gateway_id: "{{ NATGW_out.nat_gateway_id }}"
       register: privrt_out  
 
- - debug:
+    - debug:
         var: "{{ item }}"
       loop:
         - vpcout.vpc.id
@@ -173,6 +173,7 @@
         - NATGW_out.nat_gateway_id
         - privrt_out.route_table.id
         - pubrt_out.route_table.id
+
 
     - set_fact:
         vpcid: "{{ vpcout.vpc.id }}"
