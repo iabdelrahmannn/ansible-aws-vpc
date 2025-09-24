@@ -1,0 +1,25 @@
+- name: stack setup
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Import vpc setup variables
+      include_vars: vars/output_vars
+
+    - name: Import ec2 setup variables
+      include_vars: vars/stacksetup
+
+    - name: create a new EC2 key pair
+      amazon.aws.ec2_key:
+        name: vpro-key
+        region: "{{region}}"
+      register: vprokey_out
+
+    - name: save private key into file loginkey_vpro.pem
+      copy:
+         content: "{{vprokey_out.key.private_key}}"
+         dest: "./loginkey_vpro.pem"
+         mode: 0600
+      when: vprokey_out.changed
+
+    

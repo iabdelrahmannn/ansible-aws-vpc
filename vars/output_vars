@@ -6,6 +6,7 @@ privsub4id: subnet-052cee60013f755d2
 privsub5id: subnet-0844115cdaf354226
 privsub6id: subnet-0d99830745e33ff73
 igwid: igw-008f716b5b2037f32
-NATGWid: nat-0f9e22c8026550441
+NATGWid: nat-0ae4d8992f8cdd410
 privrtid: rtb-03c448c0e0b51bc14
 pubrtid: rtb-01e4f958e2e9b127f
+region: "us-east-2"
