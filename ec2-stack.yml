@@ -76,11 +76,7 @@
         region: "{{region}}"
         vpc_subnet_id: "{{privsub4id}}"
         exact_count: 1
-        count_tag:
-          name: web-01-nginix
-          project: vprofile
-          owner: devops team 
-        group_id: "{{SGEC2_out.group_id}}"
+        security_group_id: "{{SGEC2_out.group_id}}"
         wait: yes
         wait_timeout: 300
         image_id: "{{nginx_ami}}"
@@ -97,12 +93,8 @@
         instance_type: t2.micro
         region: "{{region}}"
         vpc_subnet_id: "{{privsub4id}}"
-        exact_count: 1
-        count_tag:
-          name: app-01-tomcat
-          project: vprofile
-          owner: devops team 
-        group_id: "{{SGEC2_out.group_id}}"
+        exact_count: 1 
+        security_group_id: "{{SGEC2_out.group_id}}"
         wait: yes
         wait_timeout: 300
         image_id: "{{tomcat_ami}}"
@@ -120,11 +112,7 @@
         region: "{{region}}"
         vpc_subnet_id: "{{privsub4id}}"
         exact_count: 1
-        count_tag:
-          name: mc-01-memcache
-          project: vprofile
-          owner: devops team 
-        group_id: "{{SGEC2_out.group_id}}"
+        security_group_id: "{{SGEC2_out.group_id}}"
         wait: yes
         wait_timeout: 300
         image_id: "{{memcache_ami}}"
@@ -142,11 +130,7 @@
         region: "{{region}}"
         vpc_subnet_id: "{{privsub4id}}"
         exact_count: 1
-        count_tag:
-          name: rbq-01-rabbitmq
-          project: vprofile
-          owner: devops team 
-        group_id: "{{SGEC2_out.group_id}}"
+        security_group_id: "{{SGEC2_out.group_id}}"
         wait: yes
         wait_timeout: 300
         image_id: "{{rmq_ami}}"
@@ -164,11 +148,7 @@
         region: "{{region}}"
         vpc_subnet_id: "{{privsub4id}}"
         exact_count: 1
-        count_tag:
-          name: db-01-mysql
-          project: vprofile
-          owner: devops team 
-        group_id: "{{SGEC2_out.group_id}}"
+        security_group_id: "{{SGEC2_out.group_id}}"
         wait: yes
         wait_timeout: 300
         image_id: "{{mysql_ami}}"
