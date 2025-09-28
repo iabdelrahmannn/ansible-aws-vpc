@@ -34,7 +34,7 @@
             to_port: 80
             cidr_ip: 0.0.0.0/0
             rule_desc: allow all on port 80
-         register: SGELB_out   
+      register: SGELB_out   
    
     - name: create SG for ec2
       amazon.aws.ec2_security_group:
@@ -54,7 +54,7 @@
             from_port: 22
             to_port: 22
             group_id: "{{bastionsg_out}}"
-         register: SGEC2_out   
+      register: SGEC2_out   
       
     - name: update SG with its own sg id
       amazon.aws.ec2_security_group:
