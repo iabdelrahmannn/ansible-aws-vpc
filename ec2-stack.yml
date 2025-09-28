@@ -161,23 +161,25 @@
     - debug: 
         var: db01_out.tagged_instances[0].id   
 
-    - local_action:
-         module: ec2_lb_lb
-         name:
-         region: "{{region}}"
-         state: present
-         instance_ids:
-           - "{{web01_out.tagged_instances[0].id}}"
-         purge_instance_ids: true
-         security_group: "{{SGELB_out.group_id}}"
-         subnets:
-           - "{{pubsub1id}}"
-           - "{{pubsub2id}}"
-           - "{{pubsub3id}}" 
-         listeners:
-           protocol: http
-           load_balancer_port: 80
-           isntance_port: 80
+    - name: create classic ELB
+      amazon.aws.ec2_elb_lb:
+        name: vprofile-elb
+        region: "{{ region }}"
+        state: present
+        subnets:
+          - "{{ pubsub1id }}"
+          - "{{ pubsub2id }}"
+          - "{{ pubsub3id }}"
+        security_group_ids:
+          - "{{ SGELB_out.group_id }}"
+        instance_ids:
+          - "{{ web01_out.instance_ids[0] }}"
+        purge_instance_ids: true
+        listeners:
+          - protocol: http
+            load_balancer_port: 80
+            instance_port: 80
+
     - name: insert Host IP & name in file provision-stack/group_vars/hostsip
       blockinfile:
         path: provision-stack/group_vars/hostsip
