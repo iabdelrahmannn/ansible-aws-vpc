@@ -1,166 +1,179 @@
+---
 - name: stack setup
   hosts: localhost
   connection: local
   gather_facts: false
+
   tasks:
-    - name: Import vpc setup variables
-      include_vars: vars/output_vars
+    # ===== vars =====
+    - name: Import VPC/output vars
+      ansible.builtin.include_vars:
+        file: vars/output_vars
 
-    - name: Import ec2 setup variables
-      include_vars: vars/stacksetup
+    - name: Import EC2 stack vars
+      ansible.builtin.include_vars:
+        file: vars/stacksetup
 
+    # ===== key pair =====
     - name: create a new EC2 key pair
       amazon.aws.ec2_key:
         name: vpro-key
-        region: "{{region}}"
+        region: "{{ region }}"
       register: vprokey_out
 
     - name: save private key into file loginkey_vpro.pem
-      copy:
-         content: "{{vprokey_out.key.private_key}}"
-         dest: "./loginkey_vpro.pem"
-         mode: 0600
+      ansible.builtin.copy:
+        content: "{{ vprokey_out.key.private_key }}"
+        dest: "./loginkey_vpro.pem"
+        mode: "0600"
       when: vprokey_out.changed
 
+    # ===== security groups =====
     - name: create SG for LB
       amazon.aws.ec2_security_group:
-         name: SG_ELB
-         region: "{{region}}"
-         description: allow port 80 form everywhere
-         vpc_id: "{{vpcid}}"
-         rules:
+        name: SG_ELB
+        region: "{{ region }}"
+        description: allow port 80 from everywhere
+        vpc_id: "{{ vpcid }}"
+        rules:
           - proto: tcp
             from_port: 80
             to_port: 80
             cidr_ip: 0.0.0.0/0
             rule_desc: allow all on port 80
-      register: SGELB_out   
-   
-    - name: create SG for ec2
+      register: SGELB_out
+
+    - name: create SG for EC2
       amazon.aws.ec2_security_group:
-         name: SG_EC2
-         region: "{{region}}"
-         description: allow port 22 form everywhere
-         vpc_id: "{{vpcid}}"
-         purge_rules: no
-         rules:
+        name: SG_EC2
+        region: "{{ region }}"
+        description: allow port 22 from everywhere
+        vpc_id: "{{ vpcid }}"
+        purge_rules: no
+        rules:
           - proto: tcp
             from_port: 80
             to_port: 80
-            group_id: "{{SGELB_out.group_id}}"
+            group_id: "{{ SGELB_out.group_id }}"
             rule_desc: allow all on port 80
-
           - proto: tcp
             from_port: 22
             to_port: 22
-            group_id: "{{bastionsg_out}}"
-      register: SGEC2_out   
-      
+            group_id: "{{ bastionsg_out }}"
+      register: SGEC2_out
+
     - name: update SG with its own sg id
       amazon.aws.ec2_security_group:
         name: SG_EC2
-        region: "{{region}}"
-        description: allow port 22 form everywhere
-        vpc_id: "{{vpcid}}"
+        region: "{{ region }}"
+        description: allow port 22 from everywhere
+        vpc_id: "{{ vpcid }}"
         purge_rules: no
         rules:
-         - proto: all
-           group_id: "{{SGEC2_out.group_id}}"
+          - proto: all
+            group_id: "{{ SGEC2_out.group_id }}"
 
-
-    - name: create nginix web01
+    # ===== instances =====
+    - name: create nginx web01
       amazon.aws.ec2_instance:
-        name: "web-01-nginix"
+        region: "{{ region }}"
         key_name: vpro-key
+        image_id: "{{ nginx_ami }}"
         instance_type: t2.micro
-        region: "{{region}}"
-        vpc_subnet_id: "{{privsub4id}}"
-        exact_count: 1
-        security_group: "{{SGEC2_out.group_id}}"
-        wait: yes
+        vpc_subnet_id: "{{ privsub4id }}"
+        security_group_ids:
+          - "{{ SGEC2_out.group_id }}"
+        count: 1
+        wait: true
         wait_timeout: 300
-        image_id: "{{nginx_ami}}"
         tags:
-          name: web-01-nginix
+          Name: web-01-nginx
           project: vprofile
-          owner: devops team           
+          Owner: devops team
       register: web01_out
 
     - name: create tomcat app01
       amazon.aws.ec2_instance:
-        name: "app-01-tomcat"
+        region: "{{ region }}"
         key_name: vpro-key
+        image_id: "{{ tomcat_ami }}"
         instance_type: t2.micro
-        region: "{{region}}"
-        vpc_subnet_id: "{{privsub4id}}"
-        exact_count: 1 
-        security_group: "{{SGEC2_out.group_id}}"
-        wait: yes
+        vpc_subnet_id: "{{ privsub4id }}"
+        security_group_ids:
+          - "{{ SGEC2_out.group_id }}"
+        count: 1
+        wait: true
         wait_timeout: 300
-        image_id: "{{tomcat_ami}}"
         tags:
-          name: app-01-tomcat
+          Name: app-01-tomcat
           project: vprofile
-          owner: devops team           
-      register: app01_out  
+          Owner: devops team
+      register: app01_out
 
     - name: create memcache mc01
       amazon.aws.ec2_instance:
-        name: "mc-01-memcache"
+        region: "{{ region }}"
         key_name: vpro-key
+        image_id: "{{ memcache_ami }}"
         instance_type: t2.micro
-        region: "{{region}}"
-        vpc_subnet_id: "{{privsub4id}}"
-        exact_count: 1
-        security_group: "{{SGEC2_out.group_id}}"
-        wait: yes
+        vpc_subnet_id: "{{ privsub4id }}"
+        security_group_ids:
+          - "{{ SGEC2_out.group_id }}"
+        count: 1
+        wait: true
         wait_timeout: 300
-        image_id: "{{memcache_ami}}"
         tags:
-          name: mc-01-memcache
+          Name: mc-01-memcache
           project: vprofile
-          owner: devops team           
-      register: mc01_out    
+          Owner: devops team
+      register: mc01_out
 
     - name: create rabbitmq rbq01
       amazon.aws.ec2_instance:
-        name: "rbq-01-rabbitmq"
+        region: "{{ region }}"
         key_name: vpro-key
+        image_id: "{{ rmq_ami }}"
         instance_type: t2.micro
-        region: "{{region}}"
-        vpc_subnet_id: "{{privsub4id}}"
-        exact_count: 1
-        security_group: "{{SGEC2_out.group_id}}"
-        wait: yes
+        vpc_subnet_id: "{{ privsub4id }}"
+        security_group_ids:
+          - "{{ SGEC2_out.group_id }}"
+        count: 1
+        wait: true
         wait_timeout: 300
-        image_id: "{{rmq_ami}}"
         tags:
-          name: rbq-01-rabbitmq
+          Name: rbq-01-rabbitmq
           project: vprofile
-          owner: devops team           
-      register: rbq01_out  
+          Owner: devops team
+      register: rbq01_out
 
-    - name: create mysql rbq01
+    - name: create mysql db01
       amazon.aws.ec2_instance:
-        name: "db-01-mysql"
+        region: "{{ region }}"
         key_name: vpro-key
+        image_id: "{{ mysql_ami }}"
         instance_type: t2.micro
-        region: "{{region}}"
-        vpc_subnet_id: "{{privsub4id}}"
-        exact_count: 1
-        security_group: "{{SGEC2_out.group_id}}"
-        wait: yes
+        vpc_subnet_id: "{{ privsub4id }}"
+        security_group_ids:
+          - "{{ SGEC2_out.group_id }}"
+        count: 1
+        wait: true
         wait_timeout: 300
-        image_id: "{{mysql_ami}}"
         tags:
-          name: db-01-mysql
+          Name: db-01-mysql
           project: vprofile
-          owner: devops team           
-      register: db01_out  
+          Owner: devops team
+      register: db01_out
 
-    - debug: 
-        var: db01_out.tagged_instances[0].id   
+    # ===== collect IPs =====
+    - name: collect private IPs
+      ansible.builtin.set_fact:
+        web01_ip: "{{ web01_out.instances[0].private_ip_address }}"
+        app01_ip: "{{ app01_out.instances[0].private_ip_address }}"
+        rmq01_ip: "{{ rbq01_out.instances[0].private_ip_address }}"
+        mc01_ip:  "{{ mc01_out.instances[0].private_ip_address }}"
+        db01_ip:  "{{ db01_out.instances[0].private_ip_address }}"
 
+    # ===== Classic ELB =====
     - name: create classic ELB
       amazon.aws.ec2_elb_lb:
         name: vprofile-elb
@@ -180,60 +193,61 @@
             load_balancer_port: 80
             instance_port: 80
 
-    - name: insert Host IP & name in file provision-stack/group_vars/hostsip
-      blockinfile:
+    # ===== persist hosts and inventory =====
+    - name: write provision-stack/group_vars/hostsip
+      ansible.builtin.blockinfile:
         path: provision-stack/group_vars/hostsip
+        create: true
         block: |
-           web01_ip: {{web01_out.tagged_instances[0].private_ip}}
-           app01_ip: {{app01_out.tagged_instances[0].private_ip}}
-           rmq01_ip: {{rmq01_out.tagged_instances[0].private_ip}}
-           mc01_ip:  {{mc01_out.tagged_instances[0].private_ip}}
-           db01_ip:  {{db01_out.tagged_instances[0].private_ip}}
-    
-    - name: copy login key to provision_stack directory
-      copy:
+          web01_ip: {{ web01_ip }}
+          app01_ip: {{ app01_ip }}
+          rmq01_ip: {{ rmq01_ip }}
+          mc01_ip:  {{ mc01_ip }}
+          db01_ip:  {{ db01_ip }}
+
+    - name: copy login key to provision-stack
+      ansible.builtin.copy:
         src: loginkey_vpro.pem
         dest: provision-stack/loginkey_vpro.pem
-        mode: 0400
+        mode: "0400"
 
-    - name: insert inventory file provision-stack/inventory-vpro
-      blockinfile:
+    - name: write provision-stack/inventory-vpro
+      ansible.builtin.blockinfile:
         path: provision-stack/inventory-vpro
+        create: true
         block: |
-           web01 ansible_host={{web01_out.tagged_instances[0].private_ip}}
-           app01: ansible_host={{app01_out.tagged_instances[0].private_ip}}
-           rmq01: ansible_host={{rmq01_out.tagged_instances[0].private_ip}}
-           mc01:  ansible_host={{mc01_out.tagged_instances[0].private_ip}}
-           db01:  ansible_host={{db01_out.tagged_instances[0].private_ip}}
-           Ansible-vm: ansible_host=127.0.0.1 ansible_connection=local
+          web01 ansible_host={{ web01_ip }}
+          app01 ansible_host={{ app01_ip }}
+          rmq01 ansible_host={{ rmq01_ip }}
+          mc01  ansible_host={{ mc01_ip }}
+          db01  ansible_host={{ db01_ip }}
+          Ansible-vm ansible_host=127.0.0.1 ansible_connection=local
 
+          [websrvgrp]
+          web01
 
-           [websrvgrp]
-           web01
+          [appsrvgrp]
+          app01
 
-           [appsrvgrp]
-           app01
+          [rmqsrvgrp]
+          rmq01
 
-           [rmqsrvgrp]
-           rmq01
+          [mcsrvgrp]
+          mc01
 
-           [mcsrvgrp]
-           mc01
+          [dbsrvgrp]
+          db01
 
-           [dbsrvgrp]
-           db01
+          [control]
+          cntl
 
-           [control]
-           cntl
+          [stack_inst:children]
+          websrvgrp
+          appsrvgrp
+          rmqsrvgrp
+          mcsrvgrp
+          dbsrvgrp
 
-           [stack_inst:children]
-           websrvgrp
-           appsrvgrp
-           rmqsrvgrp
-           mcsrvgrp
-           dbsrvgrp
-
-           [stack_inst:vars]
-           ansible_user=ubuntu
-           ansible_ssh_private_key_file=loginkey_vpro.pem
-          #ansible_python_interpreter=/usr/bin/python3
+          [stack_inst:vars]
+          ansible_user=ubuntu
+          ansible_ssh_private_key_file=loginkey_vpro.pem
