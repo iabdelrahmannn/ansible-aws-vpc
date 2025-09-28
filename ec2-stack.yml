@@ -174,7 +174,7 @@
            - "{{pubsub1id}}"
            - "{{pubsub2id}}"
            - "{{pubsub3id}}" 
-        listeners:
+         listeners:
            protocol: http
            load_balancer_port: 80
            isntance_port: 80
