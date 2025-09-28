@@ -76,7 +76,7 @@
         region: "{{region}}"
         vpc_subnet_id: "{{privsub4id}}"
         exact_count: 1
-        security_group_id: "{{SGEC2_out.group_id}}"
+        security_group: "{{SGEC2_out.group_id}}"
         wait: yes
         wait_timeout: 300
         image_id: "{{nginx_ami}}"
@@ -94,7 +94,7 @@
         region: "{{region}}"
         vpc_subnet_id: "{{privsub4id}}"
         exact_count: 1 
-        security_group_id: "{{SGEC2_out.group_id}}"
+        security_group: "{{SGEC2_out.group_id}}"
         wait: yes
         wait_timeout: 300
         image_id: "{{tomcat_ami}}"
@@ -112,7 +112,7 @@
         region: "{{region}}"
         vpc_subnet_id: "{{privsub4id}}"
         exact_count: 1
-        security_group_id: "{{SGEC2_out.group_id}}"
+        security_group: "{{SGEC2_out.group_id}}"
         wait: yes
         wait_timeout: 300
         image_id: "{{memcache_ami}}"
@@ -130,7 +130,7 @@
         region: "{{region}}"
         vpc_subnet_id: "{{privsub4id}}"
         exact_count: 1
-        security_group_id: "{{SGEC2_out.group_id}}"
+        security_group: "{{SGEC2_out.group_id}}"
         wait: yes
         wait_timeout: 300
         image_id: "{{rmq_ami}}"
@@ -148,7 +148,7 @@
         region: "{{region}}"
         vpc_subnet_id: "{{privsub4id}}"
         exact_count: 1
-        security_group_id: "{{SGEC2_out.group_id}}"
+        security_group: "{{SGEC2_out.group_id}}"
         wait: yes
         wait_timeout: 300
         image_id: "{{mysql_ami}}"
