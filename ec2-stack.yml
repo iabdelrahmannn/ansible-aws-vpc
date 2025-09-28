@@ -22,4 +22,49 @@
          mode: 0600
       when: vprokey_out.changed
 
+    - name: create SG for LB
+      amazon.aws.ec2_security_group:
+         name: SG_ELB
+         region: "{{region}}"
+         description: allow port 80 form everywhere
+         vpc_id: "{{vpcid}}"
+         rules:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+            rule_desc: allow all on port 80
+         register: SGELB_out   
+   
+    - name: create SG for ec2
+      amazon.aws.ec2_security_group:
+         name: SG_EC2
+         region: "{{region}}"
+         description: allow port 22 form everywhere
+         vpc_id: "{{vpcid}}"
+         purge_rules: no
+         rules:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            group_id: "{{SGLB_out.group_id}}"
+            rule_desc: allow all on port 80
+
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            group_id: "{{bastionsg_out}}"
+         register: SGEC2_out   
+      
+      - name: update SG with its own sg id
+        amazon.aws.ec2_security_group:
+          name: SG_EC2
+          region: "{{region}}"
+          description: allow port 22 form everywhere
+          vpc_id: "{{vpcid}}"
+          purge_rules: no
+          rules:
+          - proto: all
+            group_id: "{{SGEC2_out.group_id}}"
+            
     
