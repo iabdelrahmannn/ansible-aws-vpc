@@ -56,15 +56,15 @@
             group_id: "{{bastionsg_out}}"
          register: SGEC2_out   
       
-      - name: update SG with its own sg id
-        amazon.aws.ec2_security_group:
-          name: SG_EC2
-          region: "{{region}}"
-          description: allow port 22 form everywhere
-          vpc_id: "{{vpcid}}"
-          purge_rules: no
-          rules:
-          - proto: all
-            group_id: "{{SGEC2_out.group_id}}"
+    - name: update SG with its own sg id
+      amazon.aws.ec2_security_group:
+        name: SG_EC2
+        region: "{{region}}"
+        description: allow port 22 form everywhere
+        vpc_id: "{{vpcid}}"
+        purge_rules: no
+        rules:
+         - proto: all
+           group_id: "{{SGEC2_out.group_id}}"
             
     
