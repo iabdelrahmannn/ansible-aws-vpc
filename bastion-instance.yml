@@ -48,3 +48,10 @@
         tags:
           Environment: Testing
       register: bastionhost_out
+
+    - name: Inset bastionid in vars/output_vars
+      blockinfile:
+        path: vars/output_vars
+        backup: yes
+        block: |
+          bastionsg_out: "{{bastionsg_out.group_id}}""
