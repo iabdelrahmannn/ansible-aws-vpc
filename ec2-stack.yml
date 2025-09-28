@@ -47,7 +47,7 @@
           - proto: tcp
             from_port: 80
             to_port: 80
-            group_id: "{{SGLB_out.group_id}}"
+            group_id: "{{SGELB_out.group_id}}"
             rule_desc: allow all on port 80
 
           - proto: tcp
