@@ -10,5 +10,5 @@ NATGWid: nat-0ae4d8992f8cdd410
 privrtid: rtb-03c448c0e0b51bc14
 pubrtid: rtb-01e4f958e2e9b127f
 # BEGIN ANSIBLE MANAGED BLOCK
-bastionsg_out: "sg-00f0e8beea0d6401c""
+bastionsg_out: "sg-00f0e8beea0d6401c"
 # END ANSIBLE MANAGED BLOCK
