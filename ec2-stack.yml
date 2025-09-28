@@ -66,5 +66,117 @@
         rules:
          - proto: all
            group_id: "{{SGEC2_out.group_id}}"
-            
-    
+
+
+    - name: create nginix web01
+      amazon.aws.ec2_instance:
+        name: "web-01-nginix"
+        key_name: vpro-key
+        instance_type: t2.micro
+        region: "{{region}}"
+        vpc_subnet_id: "{{privsub4id}}"
+        exact_count: 1
+        count_tag:
+          name: web-01-nginix
+          project: vprofile
+          owner: devops team 
+        group_id: "{{SGEC2_out.group_id}}"
+        wait: yes
+        wait_timeout: 300
+        image_id: "{{nginx_ami}}"
+        tags:
+          name: web-01-nginix
+          project: vprofile
+          owner: devops team           
+      register: web01_out
+
+    - name: create tomcat app01
+      amazon.aws.ec2_instance:
+        name: "app-01-tomcat"
+        key_name: vpro-key
+        instance_type: t2.micro
+        region: "{{region}}"
+        vpc_subnet_id: "{{privsub4id}}"
+        exact_count: 1
+        count_tag:
+          name: app-01-tomcat
+          project: vprofile
+          owner: devops team 
+        group_id: "{{SGEC2_out.group_id}}"
+        wait: yes
+        wait_timeout: 300
+        image_id: "{{tomcat_ami}}"
+        tags:
+          name: app-01-tomcat
+          project: vprofile
+          owner: devops team           
+      register: app01_out  
+
+    - name: create memcache mc01
+      amazon.aws.ec2_instance:
+        name: "mc-01-memcache"
+        key_name: vpro-key
+        instance_type: t2.micro
+        region: "{{region}}"
+        vpc_subnet_id: "{{privsub4id}}"
+        exact_count: 1
+        count_tag:
+          name: mc-01-memcache
+          project: vprofile
+          owner: devops team 
+        group_id: "{{SGEC2_out.group_id}}"
+        wait: yes
+        wait_timeout: 300
+        image_id: "{{memcache_ami}}"
+        tags:
+          name: mc-01-memcache
+          project: vprofile
+          owner: devops team           
+      register: mc01_out    
+
+    - name: create rabbitmq rbq01
+      amazon.aws.ec2_instance:
+        name: "rbq-01-rabbitmq"
+        key_name: vpro-key
+        instance_type: t2.micro
+        region: "{{region}}"
+        vpc_subnet_id: "{{privsub4id}}"
+        exact_count: 1
+        count_tag:
+          name: rbq-01-rabbitmq
+          project: vprofile
+          owner: devops team 
+        group_id: "{{SGEC2_out.group_id}}"
+        wait: yes
+        wait_timeout: 300
+        image_id: "{{rmq_ami}}"
+        tags:
+          name: rbq-01-rabbitmq
+          project: vprofile
+          owner: devops team           
+      register: rbq01_out  
+
+    - name: create mysql rbq01
+      amazon.aws.ec2_instance:
+        name: "db-01-mysql"
+        key_name: vpro-key
+        instance_type: t2.micro
+        region: "{{region}}"
+        vpc_subnet_id: "{{privsub4id}}"
+        exact_count: 1
+        count_tag:
+          name: db-01-mysql
+          project: vprofile
+          owner: devops team 
+        group_id: "{{SGEC2_out.group_id}}"
+        wait: yes
+        wait_timeout: 300
+        image_id: "{{mysql_ami}}"
+        tags:
+          name: db-01-mysql
+          project: vprofile
+          owner: devops team           
+      register: db01_out  
+
+    - debug: 
+        var: db01_out   
