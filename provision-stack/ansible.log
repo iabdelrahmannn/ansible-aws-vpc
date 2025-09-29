@@ -1,0 +1,48 @@
+2025-09-29 16:06:14,011 p=1348 u=ubuntu n=ansible | PLAY [Generate artifact, copy artifact & sql file to files directory] ******************************
+2025-09-29 16:06:14,026 p=1348 u=ubuntu n=ansible | TASK [Gathering Facts] *****************************************************************************
+2025-09-29 16:06:15,880 p=1348 u=ubuntu n=ansible | ok: [localhost]
+2025-09-29 16:06:15,894 p=1348 u=ubuntu n=ansible | TASK [Install  jdk, maven, git] ********************************************************************
+2025-09-29 16:06:55,536 p=1348 u=ubuntu n=ansible | ok: [localhost] => (item=git)
+2025-09-29 16:08:15,181 p=1348 u=ubuntu n=ansible | changed: [localhost] => (item=openjdk-8-jdk)
+2025-09-29 16:08:25,286 p=1348 u=ubuntu n=ansible | changed: [localhost] => (item=maven)
+2025-09-29 16:08:25,297 p=1348 u=ubuntu n=ansible | TASK [Clone source code from github] ***************************************************************
+2025-09-29 16:08:29,670 p=1348 u=ubuntu n=ansible | changed: [localhost]
+2025-09-29 16:08:29,677 p=1348 u=ubuntu n=ansible | TASK [mvn install command to build artifact] *******************************************************
+2025-09-29 16:09:12,147 p=1348 u=ubuntu n=ansible | changed: [localhost]
+2025-09-29 16:09:12,167 p=1348 u=ubuntu n=ansible | TASK [Copy artifacts to files directory] ***********************************************************
+2025-09-29 16:09:13,236 p=1348 u=ubuntu n=ansible | changed: [localhost] => (item=/home/ubuntu/ansible-aws-vpc/provision-stack/Vprofile-repo/target/vprofile-v2.war)
+2025-09-29 16:09:13,243 p=1348 u=ubuntu n=ansible | TASK [Copy SQL file to files directory] ************************************************************
+2025-09-29 16:09:13,707 p=1348 u=ubuntu n=ansible | changed: [localhost]
+2025-09-29 16:09:13,724 p=1348 u=ubuntu n=ansible | PLAY RECAP *****************************************************************************************
+2025-09-29 16:09:13,724 p=1348 u=ubuntu n=ansible | localhost                  : ok=6    changed=5    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-09-29 16:11:16,246 p=5082 u=ubuntu n=ansible | PLAY [Set host to ip mapping in /etc/hosts file of all the instances in the stack] *****************
+2025-09-29 16:11:16,263 p=5082 u=ubuntu n=ansible | TASK [Gathering Facts] *****************************************************************************
+2025-09-29 16:11:17,338 p=5082 u=ubuntu n=ansible | fatal: [cntl]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: ssh: Could not resolve hostname cntl: Temporary failure in name resolution", "unreachable": true}
+2025-09-29 16:11:17,935 p=5082 u=ubuntu n=ansible | ok: [Ansible-vm]
+2025-09-29 16:11:18,748 p=5082 u=ubuntu n=ansible | ok: [web01]
+2025-09-29 16:11:19,183 p=5082 u=ubuntu n=ansible | ok: [rmq01]
+2025-09-29 16:11:19,305 p=5082 u=ubuntu n=ansible | ok: [app01]
+2025-09-29 16:11:20,429 p=5082 u=ubuntu n=ansible | ok: [mc01]
+2025-09-29 16:11:20,818 p=5082 u=ubuntu n=ansible | ok: [db01]
+2025-09-29 16:11:20,870 p=5082 u=ubuntu n=ansible | TASK [Import VPC setup Variable] *******************************************************************
+2025-09-29 16:11:20,907 p=5082 u=ubuntu n=ansible | ok: [Ansible-vm]
+2025-09-29 16:11:20,923 p=5082 u=ubuntu n=ansible | ok: [web01]
+2025-09-29 16:11:20,937 p=5082 u=ubuntu n=ansible | ok: [app01]
+2025-09-29 16:11:20,955 p=5082 u=ubuntu n=ansible | ok: [rmq01]
+2025-09-29 16:11:20,956 p=5082 u=ubuntu n=ansible | ok: [mc01]
+2025-09-29 16:11:20,965 p=5082 u=ubuntu n=ansible | ok: [db01]
+2025-09-29 16:11:20,971 p=5082 u=ubuntu n=ansible | TASK [Update hosts file for all the hosts] *********************************************************
+2025-09-29 16:11:21,554 p=5082 u=ubuntu n=ansible | changed: [Ansible-vm]
+2025-09-29 16:11:21,576 p=5082 u=ubuntu n=ansible | changed: [rmq01]
+2025-09-29 16:11:21,608 p=5082 u=ubuntu n=ansible | changed: [mc01]
+2025-09-29 16:11:21,614 p=5082 u=ubuntu n=ansible | changed: [app01]
+2025-09-29 16:11:21,617 p=5082 u=ubuntu n=ansible | changed: [web01]
+2025-09-29 16:11:21,899 p=5082 u=ubuntu n=ansible | changed: [db01]
+2025-09-29 16:11:21,990 p=5082 u=ubuntu n=ansible | PLAY RECAP *****************************************************************************************
+2025-09-29 16:11:21,990 p=5082 u=ubuntu n=ansible | Ansible-vm                 : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-09-29 16:11:21,990 p=5082 u=ubuntu n=ansible | app01                      : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-09-29 16:11:21,991 p=5082 u=ubuntu n=ansible | cntl                       : ok=0    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0   
+2025-09-29 16:11:21,991 p=5082 u=ubuntu n=ansible | db01                       : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-09-29 16:11:21,991 p=5082 u=ubuntu n=ansible | mc01                       : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-09-29 16:11:21,991 p=5082 u=ubuntu n=ansible | rmq01                      : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2025-09-29 16:11:21,991 p=5082 u=ubuntu n=ansible | web01                      : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
